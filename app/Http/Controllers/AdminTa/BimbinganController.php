@@ -33,9 +33,10 @@ class BimbinganController extends Controller
 
         $ta_mahasiswa = Bimbingan::taMahasiswaAdmin();
         $tm_collection = collect($ta_mahasiswa);
-
+        //dd($tm_collection);
         $log = BimbinganLog::log();
         $default_ta = DB::table('master_ta')->select('ta')->where('status', 1)->first();
+        //dd($default_ta);
 
         if ($request->filled('tahun_akademik')) {
             $tm_collection = $tm_collection->where('tahun_akademik', $request->input('tahun_akademik'));
@@ -63,7 +64,7 @@ class BimbinganController extends Controller
             ];
         }
         $log_bimbingan = $temp;
-
+        
         foreach ($tm_collection as $item) {
             $item->jumlahMasterSyarat = count($item->syarat);
             $item->jumlahSyarat = collect($item->syarat)->whereNotNull('dokumen_file')->count();
@@ -72,7 +73,6 @@ class BimbinganController extends Controller
                 return is_null($s->dokumen_file);
             });
         }
-
         return view('bimbingan.index', compact('tm_collection', 'dosen', 'kode_prodi', 'default_ta', 'log_bimbingan'));
     }
 

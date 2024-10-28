@@ -19,6 +19,7 @@ class MahasiswaBimbingan extends Model
     {
         $email = Auth::user()->email;
         $dosen = DB::select("SELECT * FROM dosen WHERE email='$email';");
+        //$dosen = DB::table('dosen')->where('email', $email)->first();
 
         $ta_mahasiswa = DB::table('tas')
             ->join('mahasiswa', 'mahasiswa.mhs_nim', '=', 'tas.mhs_nim')
@@ -28,6 +29,7 @@ class MahasiswaBimbingan extends Model
             ->join('dosen', 'dosen.dosen_nip', '=', 'bimbingans.dosen_nip')
             ->where('dosen.email', $email)
             ->where('bimbingans.dosen_nip', $dosen[0]->dosen_nip)
+            //->where('bimbingans.dosen_nip', $dosen->dosen_nip)
             ->select(
                 'tas.ta_id',
                 'tas.ta_judul',
